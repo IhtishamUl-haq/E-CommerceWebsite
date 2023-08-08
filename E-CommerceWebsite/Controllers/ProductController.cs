@@ -1,5 +1,6 @@
 ﻿
 using Core.Entites;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,24 +12,24 @@ namespace E_CommerceWebsite.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly StoreContext _context;
+        //private readonly IProductRepository _product;
 
-        public ProductController( StoreContext context )
-        {
-            _context = context;
-        }
+        //public ProductController(IProductRepository product)
+        //{
+        //    _product = product;
+        //}
 
-        [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
-        {
-            var products = await _context.Products. ToListAsync();
-            return Ok(products);
-        }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List<Product>>> GetByIdProducts(int id)
-        {
-            var product = await _context.Products.Where(x=>x.Id==id).FirstOrDefaultAsync();
-            return Ok(product);
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<List<Product>>> GetProducts()
+        //{
+        //    var products = await _product.GetProductsAsync();
+        //    return Ok(products);
+        //}
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<List<Product>>> GetByIdProducts(int id)
+        //{
+        //    var product = await  _product.GetProductByIdAsync(id);
+        //    return Ok(product);
+        //}
     }
 }

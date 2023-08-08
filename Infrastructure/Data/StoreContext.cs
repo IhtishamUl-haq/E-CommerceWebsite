@@ -1,6 +1,6 @@
 ﻿using Core.Entites;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+ 
 
 namespace Infrastructure.Data
 {
@@ -12,5 +12,7 @@ namespace Infrastructure.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductBrand> ProductBrands { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
     }
 }
