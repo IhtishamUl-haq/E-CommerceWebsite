@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.DataBaseMigration
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230808170736_updatabase")]
+    [Migration("20230808184635_updatabase")]
     partial class updatabase
     {
         /// <inheritdoc />
@@ -34,18 +34,20 @@ namespace Infrastructure.Data.DataBaseMigration
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PictureUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("PrictureUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductBrandId")
                         .HasColumnType("int");
