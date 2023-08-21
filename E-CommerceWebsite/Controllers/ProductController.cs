@@ -1,5 +1,7 @@
 ﻿
 using API.DTO;
+using API.Errors;
+using API.Helpers;
 using AutoMapper;
 using Core.Entites;
 using Core.Interfaces;
@@ -28,21 +30,31 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductReturnDto>>> GetProducts()
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
+            [FromQuery] ProductSpecParams productParams)
         {
-            var specification = new ProductWithTypesAndBrandsSpecification();
-            var product = await _product.GetListWithSpacAsync(specification);
-             return _mapper.Map<List<ProductReturnDto>>(product);
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
+            var countSpec = new ProductsWithFiltersForCountSpecification(productParams);
+
+            var totalItems = await _product.CountAsync(countSpec);
+            var products = await _product.GetListWithSpecAsync(spec);
+
+            var data = _mapper.Map<IReadOnlyList<ProductToReturnDto>>(products);
+
+            return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex,
+                productParams.PageSize, totalItems, data));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<ProductReturnDto>>> GetByIdProducts(int id)
+        public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
-            var specification = new ProductWithTypesAndBrandsSpecification(id);
+            var spec = new ProductsWithTypesAndBrandsSpecification(id);
 
-            var products = await _product.GetListWithSpacAsync(specification);
+            var product = await _product.GetEntityWithSpec(spec);
 
-            return _mapper.Map<List<ProductReturnDto>>(products);
+            if (product == null) return NotFound(new ApiResponse(404));
+
+            return _mapper.Map<Product, ProductToReturnDto>(product);
         }
         [HttpGet("Brands")]
         public async Task<ActionResult<List<ProductBrand>>> GetProductsBrands()

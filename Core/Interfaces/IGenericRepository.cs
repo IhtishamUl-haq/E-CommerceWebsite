@@ -15,8 +15,10 @@ namespace Core.Interfaces
 
         Task<IReadOnlyList<T>> AllListAsync ();
 
-        Task<T> GetEntityWithSpacAsync(ISpecificaton<T> specificaton);
+        Task<T> GetEntityWithSpec(ISpecification<T> specificaton);
 
-        Task<IReadOnlyList<T>> GetListWithSpacAsync(ISpecificaton<T> specificaton);
+        Task<IReadOnlyList<T>> GetListWithSpecAsync(ISpecification<T> specificaton);
+
+        Task<int> CountAsync(ISpecification<T> spec);
     }
 }

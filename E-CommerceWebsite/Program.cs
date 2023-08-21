@@ -75,7 +75,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
- 
+app.UseCors("CorsPolicy");
 app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseStaticFiles();
 app.UseHttpsRedirection();

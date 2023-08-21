@@ -12,15 +12,28 @@ namespace Infrastructure.Data
 {
     public class SpecificatonEvaluator<TEntity> where TEntity : BaseEntity
     {
-        public static IQueryable<TEntity> GetQuery( IQueryable<TEntity> inputQuery, ISpecificaton<TEntity> spac)
+        public static IQueryable<TEntity> GetQuery( IQueryable<TEntity> inputQuery, ISpecification<TEntity> specificaton)
         {
             var query = inputQuery;
-            if(spac.Criteria != null)
+            if(specificaton.Criteria != null)
             {
-                query=query.Where(spac.Criteria);
+                query=query.Where(specificaton.Criteria);
+            }
+            if (specificaton.OrderBy != null)
+            {
+                query = query.OrderBy(specificaton.OrderBy);
+            }
+            if (specificaton.OrderByDescending != null)
+            {
+                query = query.OrderBy(specificaton.OrderByDescending);
             }
 
-            query=spac.Includes.Aggregate(query,(current,includes)=>current.Include(includes));
+            if (specificaton.IsPagingEnabled)
+            {
+                query = query.Skip(specificaton.Skip).Take(specificaton.Take);
+            }
+
+            query = specificaton.Includes.Aggregate(query,(current,includes)=>current.Include(includes));
             return query;
 
         }

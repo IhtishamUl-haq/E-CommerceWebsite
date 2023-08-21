@@ -4,7 +4,7 @@ using Core.Entites;
 
 namespace API.Helpers
 {
-    public class ProductUrlResolver : IValueResolver<Product, ProductReturnDto, string>
+    public class ProductUrlResolver : IValueResolver<Product, ProductToReturnDto, string>
     {
         private readonly IConfiguration _configuration;
 
@@ -13,7 +13,7 @@ namespace API.Helpers
             _configuration = configuration;
         }
 
-        public string Resolve(Product source, ProductReturnDto destination, string destMember, ResolutionContext context)
+        public string Resolve(Product source, ProductToReturnDto destination, string destMember, ResolutionContext context)
         {
             if (!string.IsNullOrEmpty(source.PictureUrl)){
                 return _configuration["ApiUrl"]+source.PictureUrl;

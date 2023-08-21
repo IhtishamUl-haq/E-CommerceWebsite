@@ -30,19 +30,24 @@ namespace Infrastructure.Repository
             
         }
 
-        public async Task<T> GetEntityWithSpacAsync(ISpecificaton<T> specificaton)
+        public async Task<T> GetEntityWithSpec(ISpecification<T> specificaton)
         {
              return await ApplySpecification(specificaton).AsQueryable().FirstOrDefaultAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetListWithSpacAsync(ISpecificaton<T> specificaton)
+        public async Task<IReadOnlyList<T>> GetListWithSpecAsync(ISpecification<T> specificaton)
         {
             return await ApplySpecification(specificaton).ToListAsync();
         }
 
-        private IQueryable<T> ApplySpecification(ISpecificaton<T> specificaton)
+        private IQueryable<T> ApplySpecification(ISpecification<T> specificaton)
         {
             return SpecificatonEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(),specificaton);
+        }
+
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
         }
     }
 }
