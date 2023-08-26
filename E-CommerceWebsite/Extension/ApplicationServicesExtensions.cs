@@ -37,13 +37,17 @@ namespace API.Extension
                 };
             });
 
-            services.AddCors(opt =>
+            services.AddCors(options =>
             {
-                opt.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5299");
-                });
+                options.AddPolicy("AllowLocalhost4200",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200")
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
             });
+
 
             return services;
         }
