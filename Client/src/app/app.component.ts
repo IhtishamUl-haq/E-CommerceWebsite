@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { IProducts } from './Models/Products';
-import { IPagination } from './Models/Pagination';
+import { IProducts } from './shared/Models/Products';
+import { IPagination } from './shared/Models/Pagination';
 
 @Component({
   selector: 'app-root',
@@ -10,24 +10,24 @@ import { IPagination } from './Models/Pagination';
 })
 export class AppComponent implements OnInit  {
   title="E-commerce"
-  products:any;
+  
 
-  constructor( private http:HttpClient){
+  constructor(){
 
 
   }
-
+  
   ngOnInit(): void {
-    this.http.get('https://localhost:44370/api/Product?PageIndex=1&PageSize=20&BrandId=1&TypeId=1&Sort=asc&Search=t')
-      .subscribe(
-        (response:any) => {
-
-          console.log(response.data);
-            
-        },
-         
-        
-      );
-       
+    
   }
+  //products: IProducts[] = []; 
+  //ngOnInit(): void {
+    // this.http.get<IPagination>('https://localhost:44370/api/Product?PageIndex=1&PageSize=20&BrandId=1&TypeId=1&Sort=asc&Search=t')
+    //   .subscribe(
+    //     (response: IPagination) => {
+    //       this.products = response.data;
+    //       console.log(response.data);
+    //     }
+    //   );
+ //}
 }
