@@ -4,6 +4,7 @@ import { IProducts } from '../shared/Models/Products';
 import { IPagination } from '../shared/Models/Pagination';
 import { IBrands } from '../shared/Models/ProductBrands';
 import { ITypes } from '../shared/Models/ProductType';
+import { ShopParams } from '../shared/Models/ShopParams';
  
 
 @Component({
@@ -13,17 +14,25 @@ import { ITypes } from '../shared/Models/ProductType';
 })
 export class ShopComponent implements OnInit {
   
+  
+
   products:IProducts[]=[];
   productTypes :ITypes[]=[];
   productBrands:IBrands[]=[];
-  selectTypeId:number=0;
-  selectBrandId:number=0;
+  boundaryLinks = true;
+  totalCount :number=0;
+  shopParams=new ShopParams()
 
+
+  sortOptions = [
+    {name: 'Alphabetical', value: 'name'},
+    {name: 'Price: Low to high', value: 'priceAsc'},
+    {name: 'Price: High to low', value: 'priceDesc'},
+  ];
 
   constructor(private shopService:ShopService ) { }
 
-  
-  
+   
   ngOnInit(): void {
     this.GetProduct();
       this.GetProducBrands();
@@ -33,11 +42,15 @@ export class ShopComponent implements OnInit {
   }
 
   GetProduct(){
-    this.shopService.GetProduct(this.selectTypeId, this.selectBrandId)
+    this.shopService.GetProduct(this.shopParams)
     .subscribe(
-      (response: any)  =>{
+        (response: IPagination | null) => {
+          if (response !== null) {
       this.products=    response.data;
-       
+      this.shopParams.pageNumber=response.pageIndex,
+      this.shopParams.pageSize=response.pageSize
+      this.totalCount = response.count;
+          }
     })
   }
     
@@ -63,15 +76,30 @@ export class ShopComponent implements OnInit {
     
 
   OnSelectBrandId(bradId:number){
-    this.selectBrandId=bradId;
+    this.shopParams.brandId=bradId;
     this.GetProduct();
-    console.log(this.selectBrandId + 'click brands');
+    console.log(this.shopParams.brandId + 'click brands');
   }
 
   OnSelectTypeId(typeId:number){
    
-    this.selectTypeId=typeId;
+    this.shopParams.typeId=typeId;
     this.GetProduct();
-     console.log(this.selectTypeId + 'click type');
+     console.log(this.shopParams.typeId + 'click type');
+  }
+
+  OnSortSelected(event: any) {
+    this.shopParams.sort = event.target.value; // Use event.target.value to get the selected value
+    console.log(this.shopParams.sort); // Make sure the value is correct
+    this.GetProduct();
+}
+
+
+  OnPageChanged(event: any) {
+    console.log(event);
+      this.shopParams.pageNumber = event.page;
+      console.log(this.shopParams.pageNumber);
+      this.GetProduct();
+    
   }
 }

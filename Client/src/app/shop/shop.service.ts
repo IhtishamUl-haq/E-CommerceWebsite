@@ -4,6 +4,7 @@ import { IPagination } from '../shared/Models/Pagination';
 import { IBrands } from '../shared/Models/ProductBrands';
 import { ITypes } from '../shared/Models/ProductType';
 import { map } from 'rxjs';
+import { ShopParams } from '../shared/Models/ShopParams';
  
  
  
@@ -13,22 +14,26 @@ import { map } from 'rxjs';
 })
 export class ShopService {
   baseUrl='https://localhost:44370/api/';
-  pageSize='40';
-  sort='asc';
+  //pageSize='40';
+  
   search='a';
   constructor( private http:HttpClient) { }
 
-  GetProduct(typeId:number,bradId:Number ){
+  GetProduct(shopParams:ShopParams ){
   let params =new HttpParams();
-  if(typeId){
-    params=params.append('typeId',typeId.toString());
+  if(shopParams.typeId!==0){
+    params=params.append('typeId',shopParams.typeId.toString());
   }
-   if(bradId){
-   params= params.append('brandId', bradId.toString());
+   if(shopParams.brandId!==0){
+   params= params.append('brandId', shopParams.brandId.toString());
    }  
 
-   params= params.append('PageSize', this.pageSize );
-   params= params.append('sort', this.sort );
+ 
+   params = params.append('pageIndex', shopParams.pageNumber);
+   params = params.append('pageSize', shopParams.pageSize);;
+   params = params.append('sort', shopParams.sort);
+   
+    
    params= params.append('search', this.search);
 
 
